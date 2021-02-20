@@ -1,4 +1,5 @@
 const express = require("express");
+const { sequelize } = require("../config/db");
 const Record = require("../models/Record");
 const router = express.Router();
 
@@ -23,6 +24,7 @@ router.get("/:id", async (req, res) => {
     const { id } = req.params;
 
     const record = await Record.findByPk(id);
+
     if (!record) {
       res.status(404).json({ msg: `No record found with id ${id}` });
     }
@@ -37,7 +39,31 @@ router.get("/:id", async (req, res) => {
 // @access  Private
 router.post("/", async (req, res) => {
   try {
-    res.status(201).json({ msg: "Create a record" });
+    const {
+      title,
+      artist,
+      label,
+      year,
+      catalog_number,
+      diameter,
+      rpm,
+    } = req.body;
+
+    const record = await Record.create({
+      title,
+      artist,
+      label,
+      year,
+      catalog_number,
+      diameter,
+      rpm,
+    });
+
+    if (!record) {
+      res.status(400).json({ msg: "This record could not be created" });
+    }
+
+    res.status(201).json(record);
   } catch (err) {
     console.error(err.message);
   }
@@ -62,14 +88,9 @@ router.delete("/:id", async (req, res) => {
     const { id } = req.params;
 
     const record = await Record.findByPk(id);
-
-    if (!record) {
-      res.status(404).json({ msg: `No record found with id ${id}` });
-    }
-
     await record.destroy();
 
-    res.status(204);
+    res.status(200).json();
   } catch (err) {
     console.error(err.message);
   }
