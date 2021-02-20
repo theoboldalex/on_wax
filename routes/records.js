@@ -24,7 +24,7 @@ router.get("/:id", async (req, res) => {
 
     const record = await Record.findByPk(id);
     if (!record) {
-      res.status(404).json({ msg: "No record found with that ID." });
+      res.status(404).json({ msg: `No record found with id ${id}` });
     }
     res.status(200).json(record);
   } catch (err) {
@@ -59,7 +59,17 @@ router.put("/:id", async (req, res) => {
 // @access  Private
 router.delete("/:id", async (req, res) => {
   try {
-    res.status(204).json({ msg: "Delete a record" });
+    const { id } = req.params;
+
+    const record = await Record.findByPk(id);
+
+    if (!record) {
+      res.status(404).json({ msg: `No record found with id ${id}` });
+    }
+
+    await record.destroy();
+
+    res.status(204);
   } catch (err) {
     console.error(err.message);
   }
