@@ -87,8 +87,7 @@ router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const record = await Record.findByPk(id);
-    await record.destroy();
+    await Record.destroy({ where: { id } });
 
     res.status(200).json();
   } catch (err) {
