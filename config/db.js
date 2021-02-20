@@ -2,7 +2,7 @@ const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize(process.env.RECORD_COLLECTION_DB_CONN);
 
-async function testConn() {
+async function dbConn() {
 	try {
 		await sequelize.authenticate();
 		console.log(
@@ -16,4 +16,4 @@ async function testConn() {
 	}
 }
 
-module.exports = { sequelize, testConn };
+module.exports = { sequelize, dbConn };
