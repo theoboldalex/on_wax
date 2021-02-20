@@ -11,10 +11,10 @@ dbConn();
 
 // Create Records table on server start -> TESTING ONLY
 Record.sync({ force: true })
-	.then((done) => {
-		if (done) console.log("Table created");
-	})
-	.catch((err) => console.error(err));
+  .then((done) => {
+    if (done) console.log("Table created");
+  })
+  .catch((err) => console.error(err));
 
 // Routes
 app.use("/api/v1/records", require("./routes/records"));
