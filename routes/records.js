@@ -20,7 +20,13 @@ router.get("/", async (req, res) => {
 // @access  Public
 router.get("/:id", async (req, res) => {
   try {
-    res.status(200).json({ msg: "Get record by id" });
+    const { id } = req.params;
+
+    const record = await Record.findByPk(id);
+    if (!record) {
+      res.status(404).json({ msg: "No record found with that ID." });
+    }
+    res.status(200).json(record);
   } catch (err) {
     console.error(err.message);
   }

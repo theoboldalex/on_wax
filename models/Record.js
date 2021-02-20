@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db");
 
 const Record = sequelize.define(
-  "Record",
+  "record",
   {
     title: {
       type: DataTypes.STRING,
@@ -12,6 +12,12 @@ const Record = sequelize.define(
       // TODO: Create artists table and relate on id
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    label: {
+      type: DataTypes.STRING,
+    },
+    year: {
+      type: DataTypes.INTEGER,
     },
     catalog_number: {
       type: DataTypes.STRING,
@@ -27,6 +33,7 @@ const Record = sequelize.define(
     },
   },
   {
+    underscored: true,
     timestamps: true,
   }
 );

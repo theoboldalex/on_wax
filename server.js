@@ -10,7 +10,7 @@ app.use(express.json());
 dbConn();
 
 // Create Records table on server start -> TESTING ONLY
-Record.sync({ force: true })
+Record.sync({ alter: true })
   .then((done) => {
     if (done) console.log("Table created");
   })
