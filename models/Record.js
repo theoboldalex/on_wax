@@ -18,7 +18,7 @@ const Record = sequelize.define(
 		},
 		diameter: {
 			// 7", 10", 12"
-			type: DataTypes.ENUM(['7"', '10"', '12"']),
+			type: DataTypes.ENUM(["7", "10", "12"]),
 			allowNull: false,
 		},
 		rpm: {
