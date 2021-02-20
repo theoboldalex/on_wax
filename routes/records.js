@@ -1,5 +1,4 @@
 const express = require("express");
-const { sequelize } = require("../config/db");
 const Record = require("../models/Record");
 const router = express.Router();
 
