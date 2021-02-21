@@ -1,6 +1,7 @@
 const express = require("express");
 const Record = require("../models/Record");
 const router = express.Router();
+const ServiceResponse = require("../ServiceResponse");
 
 // @route   GET /api/v1/records
 // @desc    Get all records
@@ -9,7 +10,9 @@ router.get("/", async (req, res) => {
   try {
     const records = await Record.findAll();
 
-    res.status(200).json(records);
+    const serviceResponse = new ServiceResponse(records);
+
+    res.status(200).json(serviceResponse);
   } catch (err) {
     console.error(err.message);
   }
@@ -24,10 +27,18 @@ router.get("/:id", async (req, res) => {
 
     const record = await Record.findByPk(id);
 
+    const serviceResponse = new ServiceResponse();
+
     if (!record) {
-      res.status(404).json({ msg: `No record found with id ${id}` });
+      serviceResponse.success = false;
+      serviceResponse.message = `No record found with id ${id}`;
+
+      res.status(404).json(serviceResponse);
     }
-    res.status(200).json(record);
+
+    serviceResponse.data = record;
+
+    res.status(200).json(serviceResponse);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error.");
@@ -59,11 +70,17 @@ router.post("/", async (req, res) => {
       rpm,
     });
 
+    const serviceResponse = new ServiceResponse();
+
     if (!record) {
-      res.status(400).json({ msg: "This record could not be created" });
+      serviceResponse.success = false;
+      serviceResponse.message = "This record could not be created";
+      res.status(400).json(serviceResponse);
     }
 
-    res.status(201).json(record);
+    serviceResponse.data = record;
+
+    res.status(201).json(serviceResponse);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error.");
