@@ -92,7 +92,42 @@ router.post("/", async (req, res) => {
 // @access  Private
 router.put("/:id", async (req, res) => {
   try {
-    res.status(204).json({ msg: "Update a record" });
+    const { id } = req.params;
+    const {
+      title,
+      artist,
+      label,
+      year,
+      catalog_number,
+      diameter,
+      rpm,
+    } = req.body;
+
+    const record = await Record.update(
+      {
+        title,
+        artist,
+        label,
+        year,
+        catalog_number,
+        diameter,
+        rpm,
+      },
+      { where: { id }, returning: true }
+    );
+
+    const serviceResponse = new ServiceResponse();
+
+    if (!record) {
+      serviceResponse.success = false;
+      serviceResponse.message = `No record found with id ${id}.`;
+      res.status(404).json(serviceResponse);
+    }
+
+    // record[0] = num rows effected
+    // record[1] = updated records
+    serviceResponse.data = record[1];
+    res.status(200).json(serviceResponse);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error.");
