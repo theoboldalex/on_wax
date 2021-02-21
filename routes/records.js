@@ -30,6 +30,7 @@ router.get("/:id", async (req, res) => {
     res.status(200).json(record);
   } catch (err) {
     console.error(err.message);
+    res.status(500).send("Server error.");
   }
 });
 
@@ -65,6 +66,7 @@ router.post("/", async (req, res) => {
     res.status(201).json(record);
   } catch (err) {
     console.error(err.message);
+    res.status(500).send("Server error.");
   }
 });
 
@@ -76,6 +78,7 @@ router.put("/:id", async (req, res) => {
     res.status(204).json({ msg: "Update a record" });
   } catch (err) {
     console.error(err.message);
+    res.status(500).send("Server error.");
   }
 });
 
@@ -91,6 +94,7 @@ router.delete("/:id", async (req, res) => {
     res.status(200).json();
   } catch (err) {
     console.error(err.message);
+    res.status(500).send("Server error.");
   }
 });
 
