@@ -21,6 +21,7 @@ User.sync({ alter: true })
 
 // Routes
 app.use("/api/v1/records", require("./routes/records"));
+app.use("/api/v1/users", require("./routes/users.js"));
 
 // Serve
 const PORT = process.env.PORT || 5000;
