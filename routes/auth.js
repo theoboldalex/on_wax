@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
+const ServiceResponse = require("../ServiceResponse.js");
+const User = require("../models/User.js");
 
 // @route   POST /api/v1/auth
 // @desc    auth user and get token
@@ -12,18 +15,41 @@ router.post(
     body("email", "Must be a valid email address.").isEmail(),
     body("password", "Password is required").exists(),
   ],
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(400).json({ errors: errors.array() });
     }
-    res.send("auth user and get token");
 
-    // return errors for invalid req
+    const { email, password } = req.body;
+    const serviceResponse = new ServiceResponse();
 
-    // find user in db
+    try {
+      const user = await User.findOne({ where: { email } });
 
-    // sign and return jwt
+      if (!user) {
+        serviceResponse.success = false;
+        serviceResponse.message = "Invalid credentials.";
+        res.status(400).json(serviceResponse);
+      }
+
+      // compare passwords
+      const passwordIsMatch = await bcrypt.compare(password, user.password);
+
+      if (!passwordIsMatch) {
+        serviceResponse.success = false;
+        serviceResponse.message = "Invalid credentials.";
+        res.status(400).json(serviceResponse);
+      }
+
+      // sign and return jwt
+      const payload = {};
+
+      res.json(user);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).json("Server error.");
+    }
   }
 );
 
