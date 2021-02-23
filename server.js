@@ -4,6 +4,7 @@ const { sequelize, dbConn } = require("./config/db.js");
 const colors = require("colors");
 const Record = require("./models/Record.js");
 const User = require("./models/User");
+require("dotenv").config();
 
 app.use(express.json());
 
@@ -22,6 +23,7 @@ User.sync({ alter: true })
 // Routes
 app.use("/api/v1/records", require("./routes/records"));
 app.use("/api/v1/users", require("./routes/users.js"));
+app.use("/api/v1/auth", require("./routes/auth.js"));
 
 // Serve
 const PORT = process.env.PORT || 5000;
