@@ -1,6 +1,7 @@
 const { Sequelize } = require("sequelize");
+require("dotenv").config();
 
-const sequelize = new Sequelize(process.env.RECORD_COLLECTION_DB_CONN);
+const sequelize = new Sequelize(process.env.CONN);
 
 async function dbConn() {
   try {

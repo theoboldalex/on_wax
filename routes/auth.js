@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 const ServiceResponse = require("../ServiceResponse.js");
 const User = require("../models/User.js");
+require("dotenv").config();
 
 // @route   POST /api/v1/auth
 // @desc    auth user and get token
@@ -43,9 +44,22 @@ router.post(
       }
 
       // sign and return jwt
-      const payload = {};
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
 
-      res.json(user);
+      jwt.sign(
+        payload,
+        process.env.SECRET,
+        { expiresIn: 36000 },
+        (err, token) => {
+          if (err) throw err;
+          serviceResponse.data = token;
+          res.status(200).json(serviceResponse);
+        }
+      );
     } catch (err) {
       console.error(err.message);
       res.status(500).json("Server error.");

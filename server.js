@@ -4,6 +4,7 @@ const { sequelize, dbConn } = require("./config/db.js");
 const colors = require("colors");
 const Record = require("./models/Record.js");
 const User = require("./models/User");
+require("dotenv").config();
 
 app.use(express.json());
 
