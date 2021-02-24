@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const auth = require("../middleware/auth");
 const { body, validationResult } = require("express-validator");
 const ServiceResponse = require("../ServiceResponse.js");
 const User = require("../models/User.js");
@@ -70,8 +71,11 @@ router.post(
 // @route   GET /api/v1/auth
 // @desc    get currently logged in user
 // @access  private
-router.get("/", (req, res) => {
-  res.send("get logged in user");
+router.get("/", auth, async (req, res) => {
+  try {
+    res.json({ uid: req.user.id });
+    // const user = await User.findByPk(req.user.id)
+  } catch (err) {}
 });
 
 module.exports = router;
