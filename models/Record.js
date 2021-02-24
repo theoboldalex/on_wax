@@ -19,7 +19,7 @@ const Record = sequelize.define(
     year: {
       type: DataTypes.INTEGER,
     },
-    catalog_number: {
+    catalogNumber: {
       type: DataTypes.STRING,
     },
     diameter: {
@@ -33,7 +33,6 @@ const Record = sequelize.define(
     },
   },
   {
-    underscored: true,
     timestamps: true,
   }
 );
