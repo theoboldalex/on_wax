@@ -80,7 +80,7 @@ router.post("/", auth, async (req, res) => {
       artist,
       label,
       year,
-      catalog_number,
+      catalogNumber,
       diameter,
       rpm,
     } = req.body;
@@ -90,7 +90,7 @@ router.post("/", auth, async (req, res) => {
       artist,
       label,
       year,
-      catalog_number,
+      catalogNumber,
       diameter,
       rpm,
       userId: req.user.id,
@@ -124,7 +124,7 @@ router.put("/:id", auth, async (req, res) => {
       artist,
       label,
       year,
-      catalog_number,
+      catalogNumber,
       diameter,
       rpm,
     } = req.body;
@@ -135,7 +135,7 @@ router.put("/:id", auth, async (req, res) => {
         artist,
         label,
         year,
-        catalog_number,
+        catalogNumber,
         diameter,
         rpm,
       },
@@ -144,7 +144,7 @@ router.put("/:id", auth, async (req, res) => {
 
     const serviceResponse = new ServiceResponse();
 
-    if (!record || record.user_id !== req.user.id) {
+    if (!record || record[0] === 0) {
       serviceResponse.success = false;
       serviceResponse.message = `Record with ID ${id} could not be updated. Either it does not exist or you do not have permission to edit this resource.`;
       res.status(400).json(serviceResponse);
