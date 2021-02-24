@@ -5,7 +5,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 
-// @route POST /register
+// @route POST api/v1/users/register
 // @desc Register a user
 // @access Public
 router.post(

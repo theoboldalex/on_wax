@@ -1,6 +1,7 @@
 const express = require("express");
 const Record = require("../models/Record");
 const router = express.Router();
+const auth = require("../middleware/auth.js");
 const ServiceResponse = require("../ServiceResponse");
 
 // @route   GET /api/v1/records
@@ -45,10 +46,34 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// @route   GET /api/v1/records/:user
+// @desc    Get all of a user's records
+// @access  Public
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const records = await Record.findAll({ where: { userId } });
+
+    const serviceResponse = new ServiceResponse();
+    if (!records) {
+      serviceResponse.success = false;
+      serviceResponse.message = "No records found for that user.";
+      res.status(400).json(serviceResponse);
+    }
+
+    serviceResponse.data = records;
+    res.status(200).json(serviceResponse);
+  } catch (err) {
+    console.error(err.messgae);
+    res.status(500).send("Server error");
+  }
+});
+
 // @route   POST /api/v1/records
 // @desc    Create a new record
 // @access  Private
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   try {
     const {
       title,
@@ -68,6 +93,7 @@ router.post("/", async (req, res) => {
       catalog_number,
       diameter,
       rpm,
+      userId: req.user.id,
     });
 
     const serviceResponse = new ServiceResponse();
