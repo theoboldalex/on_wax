@@ -12,13 +12,13 @@ app.use(express.json());
 dbConn();
 
 // Create Records table on server start -> TESTING ONLY
-Record.sync({ alter: true })
-  .then((done) => console.log("Table created"))
-  .catch((err) => console.error(err));
+// Record.sync({ alter: true })
+//   .then((done) => console.log("Table created"))
+//   .catch((err) => console.error(err));
 
-User.sync({ alter: true })
-  .then((done) => console.log("Table created"))
-  .catch((err) => console.error(err));
+// User.sync({ alter: true })
+//   .then((done) => console.log("Table created"))
+//   .catch((err) => console.error(err));
 
 // Routes
 app.use("/api/v1/records", require("./routes/records"));
