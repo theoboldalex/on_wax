@@ -116,7 +116,7 @@ router.post("/", auth, async (req, res) => {
 // @route   PUT /api/v1/records/:id
 // @desc    Update a record
 // @access  Private
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -139,15 +139,15 @@ router.put("/:id", async (req, res) => {
         diameter,
         rpm,
       },
-      { where: { id }, returning: true }
+      { where: { userId: req.user.id, id }, returning: true }
     );
 
     const serviceResponse = new ServiceResponse();
 
-    if (!record) {
+    if (!record || record.user_id !== req.user.id) {
       serviceResponse.success = false;
-      serviceResponse.message = `No record found with id ${id}.`;
-      res.status(404).json(serviceResponse);
+      serviceResponse.message = `Record with ID ${id} could not be updated. Either it does not exist or you do not have permission to edit this resource.`;
+      res.status(400).json(serviceResponse);
     }
 
     // record[0] = num rows effected
@@ -163,13 +163,26 @@ router.put("/:id", async (req, res) => {
 // @route   DELETE /api/v1/records/:id
 // @desc    Delete a record
 // @access  Private
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
+    const record = await Record.findOne(
+      { where: { userId: req.user.id, id } },
+      { returning: true }
+    );
 
-    await Record.destroy({ where: { id } });
+    const serviceResponse = new ServiceResponse();
 
-    res.status(200).json();
+    if (!record || record.userId !== req.user.id) {
+      serviceResponse.success = false;
+      serviceResponse.message = `Record with ID ${id} could not be deleted. Either it does not exist or you do not have permission to destroy this resource.`;
+      res.status(400).json(serviceResponse);
+    }
+
+    await record.destroy();
+
+    serviceResponse.message = "This resource has successfully been deleted.";
+    res.status(200).json(serviceResponse);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error.");
