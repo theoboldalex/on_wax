@@ -24,6 +24,7 @@ dbConn();
 app.use("/api/v1/records", require("./routes/records"));
 app.use("/api/v1/users", require("./routes/users.js"));
 app.use("/api/v1/auth", require("./routes/auth.js"));
+app.use("/api/v1/followers", require("./routes/follow.js"));
 
 // Serve
 const PORT = process.env.PORT || 5000;
