@@ -45,6 +45,36 @@ router.post("/follow/:id", auth, async (req, res) => {
 // @route   DELETE /api/v1/followers/unfollow/:id
 // @desc    Unfollow a user
 // @access  Private
-router.delete("/unfollow/:id", async (req, res) => {});
+router.delete("/unfollow/:id", auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const follow = await Follow.findOne(
+      {
+        where: {
+          followerId: req.user.id,
+          followingId: id,
+        },
+      },
+      { returning: true }
+    );
+
+    const serviceResponse = new ServiceResponse();
+
+    if (!follow) {
+      serviceResponse.success = false;
+      serviceResponse.message = `You cannot unfollow user ${id}`;
+      return res.status(404).json(serviceResponse);
+    }
+
+    await follow.destroy();
+
+    serviceResponse.message = `You have unfollowed user ${id}`;
+    res.status(200).json(serviceResponse);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error.");
+  }
+});
 
 module.exports = router;
