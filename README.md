@@ -33,3 +33,7 @@ npm run dev
 ```
 
 Note: As this project is very much a work in progress, the database tables are scaffolded on project start in _server.js_; However, as the project progresses, I plan to use the Sequelize CLI and migrations to manage changes to the Database.
+
+## UPDATE: FEB 2021
+
+The project now uses sequelize-cli for managing migrations. Docs for how to use the CLI can be found [here](https://sequelize.org/master/manual/migrations.html#migration-skeleton).
