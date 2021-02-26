@@ -7,6 +7,7 @@ const User = require("./models/User");
 require("dotenv").config();
 
 app.use(express.json());
+app.use(cors());
 
 // Connect to DB
 dbConn();
