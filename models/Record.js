@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db");
+const Like = require("./Like");
 
 const Record = sequelize.define(
   "record",
@@ -36,5 +37,8 @@ const Record = sequelize.define(
     timestamps: true,
   }
 );
+
+Record.hasMany(Like);
+Like.belongsTo(Record);
 
 module.exports = Record;
