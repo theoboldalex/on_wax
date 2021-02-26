@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const { sequelize, dbConn } = require("./config/db.js");
 const colors = require("colors");
+const cors = require("cors");
 const Record = require("./models/Record.js");
 const User = require("./models/User");
 require("dotenv").config();
