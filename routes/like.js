@@ -37,8 +37,29 @@ router.post("/like/:id", auth, async (req, res) => {
 // @route   DELETE /api/v1/likes/unlike/:id
 // @desc    Unlike a record by id
 // @access  Private
-router.delete("/unlike/:id", async (req, res) => {
+router.delete("/unlike/:id", auth, async (req, res) => {
   try {
+    const { id } = req.params;
+
+    const like = await Like.findOne({
+      where: {
+        recordId: id,
+        userId: req.user.id,
+      },
+    });
+
+    const serviceResponse = new ServiceResponse();
+
+    if (!like) {
+      serviceResponse.success = false;
+      serviceResponse.message = "You cannot unlike a post you have not liked.";
+      return res.status(400).json(serviceResponse);
+    }
+
+    await like.destroy();
+    serviceResponse.message = "You have successfully unliked this record.";
+
+    res.status(200).json(serviceResponse);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error.");
