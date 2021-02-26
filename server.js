@@ -21,10 +21,11 @@ dbConn();
 //   .catch((err) => console.error(err));
 
 // Routes
-app.use("/api/v1/records", require("./routes/records"));
+app.use("/api/v1/records", require("./routes/records.js"));
 app.use("/api/v1/users", require("./routes/users.js"));
 app.use("/api/v1/auth", require("./routes/auth.js"));
 app.use("/api/v1/followers", require("./routes/follow.js"));
+app.use("/api/v1/likes", require("./routes/like.js"));
 
 // Serve
 const PORT = process.env.PORT || 5000;
