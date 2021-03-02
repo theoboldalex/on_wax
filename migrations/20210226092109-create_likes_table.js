@@ -40,5 +40,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+    return await queryInterface.dropTable("likes");
   },
 };
