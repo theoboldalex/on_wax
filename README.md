@@ -1,4 +1,4 @@
-![alt text](./img/477e80_blacked.png "On Wax Logo")
+![alt text](./img/logo.png "On Wax Logo")
 
 # On Wax
 
